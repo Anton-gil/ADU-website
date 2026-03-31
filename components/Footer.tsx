@@ -18,7 +18,7 @@ export default function Footer() {
             <div className="flex items-center gap-4 cursor-default">
               <MagneticButton>
                 <img 
-                  src="/logo.png" 
+                  src="logo.png" 
                   alt="ADU Logo" 
                   className="h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
                 />

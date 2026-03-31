@@ -19,7 +19,7 @@ export default function Navbar() {
       <div className="flex items-center gap-4 cursor-pointer group">
         <MagneticButton>
           <img 
-            src="/logo.png" 
+            src="logo.png" 
             alt="ADU Logo" 
             className="h-10 w-auto object-contain opacity-80 group-hover:opacity-100 transition-opacity"
           />

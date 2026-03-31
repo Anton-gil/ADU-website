@@ -24,7 +24,7 @@ export default function AboutSection() {
             initial={{ scale: 0.9, opacity: 0, x: -50 }}
             animate={isInView ? { scale: 1, opacity: 1, x: 0 } : { scale: 0.9, opacity: 0, x: -50 }}
             transition={{ duration: 1, delay: 0.2 }}
-            src="/logo.png" 
+            src="logo.png" 
             alt="ADU Logo" 
             className="h-64 md:h-[32rem] w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]"
           />
