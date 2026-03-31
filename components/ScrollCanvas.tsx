@@ -21,28 +21,41 @@ export default function ScrollCanvas({ scrollYProgress, totalFrames, imageFolder
     const loadedImages: HTMLImageElement[] = [];
     let loadedCount = 0;
 
+    const handleSettled = () => {
+      loadedCount++;
+      if (onProgress) onProgress(Math.min((loadedCount / totalFrames) * 100, 100));
+      if (loadedCount === totalFrames && onLoadComplete) onLoadComplete();
+    };
+
     for (let i = 1; i <= totalFrames; i++) {
        const img = new Image();
        const paddedIndex = i.toString().padStart(3, '0');
-       
-       const handleLoad = () => {
-         loadedCount++;
-         if (onProgress) onProgress((loadedCount / totalFrames) * 100);
-         if (loadedCount === totalFrames && onLoadComplete) onLoadComplete();
-       };
 
-       img.onload = handleLoad;
+       img.onload = handleSettled;
+       // Critical fix: if any image errors (404, network, etc.) still count it
+       // so the preloader never gets permanently stuck
+       img.onerror = handleSettled;
        
-       // Handle cache or immediate load
-       img.src = `${imageFolderPath}/ezgif-frame-${paddedIndex}.jpg`;
+       // Use absolute path to guarantee resolution from domain root on Vercel
+       img.src = `/frames/ezgif-frame-${paddedIndex}.jpg`;
        if (img.complete) {
-          img.onload = null; // Prevent double firing
-          handleLoad();
+          img.onload = null;
+          img.onerror = null;
+          handleSettled();
        }
 
        loadedImages.push(img);
     }
     setImages(loadedImages);
+
+    // Safety timeout: if still loading after 15s, force-complete the preloader
+    const timeout = setTimeout(() => {
+      if (loadedCount < totalFrames && onLoadComplete) {
+        onLoadComplete();
+      }
+    }, 15000);
+
+    return () => clearTimeout(timeout);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalFrames, imageFolderPath]);
 

@@ -53,7 +53,7 @@ export default function Home() {
           <ScrollCanvas 
             scrollYProgress={canvasProgress} 
             totalFrames={120} 
-            imageFolderPath="frames" 
+            imageFolderPath="/frames" 
             onProgress={setProgress}
             onLoadComplete={() => setIsLoading(false)}
           />
