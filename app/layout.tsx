@@ -26,6 +26,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${orbitron.variable} ${rajdhani.variable}`}>
+      <head>
+        {/* Preload the first few frames so they start downloading before JS runs */}
+        <link rel="preload" as="image" href="/frames/ezgif-frame-001.jpg" fetchPriority="high" />
+        <link rel="preload" as="image" href="/frames/ezgif-frame-002.jpg" />
+        <link rel="preload" as="image" href="/frames/ezgif-frame-003.jpg" />
+      </head>
       <body className="font-rajdhani bg-adu-black text-white selection:bg-adu-gold selection:text-adu-black uppercase tracking-widest">
         {children}
       </body>

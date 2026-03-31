@@ -9,134 +9,149 @@ interface ScrollCanvasProps {
   imageFolderPath: string;
   onProgress?: (progress: number) => void;
   onLoadComplete?: () => void;
+  /** Fire onLoadComplete after this many frames are ready. Default = totalFrames. */
+  readyThreshold?: number;
 }
 
-export default function ScrollCanvas({ scrollYProgress, totalFrames, imageFolderPath, onProgress, onLoadComplete }: ScrollCanvasProps) {
+export default function ScrollCanvas({
+  scrollYProgress,
+  totalFrames,
+  imageFolderPath,
+  onProgress,
+  onLoadComplete,
+  readyThreshold,
+}: ScrollCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [images, setImages] = useState<HTMLImageElement[]>([]);
+  const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
+  const [canvasMounted, setCanvasMounted] = useState(false);
   const renderFrameRef = useRef<number>(0);
+  const completeFiredRef = useRef(false);
 
-  // Preload Images
+  // How many frames must settle before we unlock the site
+  const threshold = readyThreshold ?? totalFrames;
+
   useEffect(() => {
-    const loadedImages: HTMLImageElement[] = [];
-    let loadedCount = 0;
+    let settledCount = 0;
+    const loadedImages: (HTMLImageElement | null)[] = new Array(totalFrames).fill(null);
+    imagesRef.current = loadedImages;
 
-    const handleSettled = () => {
-      loadedCount++;
-      if (onProgress) onProgress(Math.min((loadedCount / totalFrames) * 100, 100));
-      if (loadedCount === totalFrames && onLoadComplete) onLoadComplete();
+    const handleSettled = (idx: number) => {
+      settledCount++;
+
+      // Scaled progress towards total
+      const pct = Math.min((settledCount / totalFrames) * 100, 100);
+      if (onProgress) onProgress(pct);
+
+      // As soon as frame 0 is ready, boot the canvas and draw it
+      if (idx === 0 && !canvasMounted) {
+        setCanvasMounted(true);
+      }
+
+      // Unlock the preloader once threshold frames have settled
+      if (settledCount >= threshold && !completeFiredRef.current) {
+        completeFiredRef.current = true;
+        if (onLoadComplete) onLoadComplete();
+      }
     };
 
     for (let i = 1; i <= totalFrames; i++) {
-       const img = new Image();
-       const paddedIndex = i.toString().padStart(3, '0');
+      const img = new Image();
+      const idx = i - 1;
+      const paddedIndex = i.toString().padStart(3, '0');
 
-       img.onload = handleSettled;
-       // Critical fix: if any image errors (404, network, etc.) still count it
-       // so the preloader never gets permanently stuck
-       img.onerror = handleSettled;
-       
-       // Use absolute path to guarantee resolution from domain root on Vercel
-       img.src = `/frames/ezgif-frame-${paddedIndex}.jpg`;
-       if (img.complete) {
-          img.onload = null;
-          img.onerror = null;
-          handleSettled();
-       }
+      img.onload = () => {
+        loadedImages[idx] = img;
+        handleSettled(idx);
+      };
+      img.onerror = () => {
+        loadedImages[idx] = null;
+        handleSettled(idx);
+      };
 
-       loadedImages.push(img);
-    }
-    setImages(loadedImages);
+      // Give first 10 frames high browser fetch priority
+      if (i <= 10) img.setAttribute('fetchpriority', 'high');
 
-    // Safety timeout: if still loading after 15s, force-complete the preloader
-    const timeout = setTimeout(() => {
-      if (loadedCount < totalFrames && onLoadComplete) {
-        onLoadComplete();
+      img.src = `/frames/ezgif-frame-${paddedIndex}.jpg`;
+
+      // Hit cache immediately
+      if (img.complete) {
+        img.onload = null;
+        img.onerror = null;
+        loadedImages[idx] = img;
+        handleSettled(idx);
       }
-    }, 15000);
+    }
+
+    // Hard fallback: 8s max then force-unlock regardless
+    const timeout = setTimeout(() => {
+      if (!completeFiredRef.current) {
+        completeFiredRef.current = true;
+        if (onLoadComplete) onLoadComplete();
+      }
+    }, 8000);
 
     return () => clearTimeout(timeout);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalFrames, imageFolderPath]);
 
-  // Handle Resize and Drawing Logic
-  const drawImage = (img: HTMLImageElement | undefined) => {
-    if (!canvasRef.current || !img) return;
+  // ─── Drawing ───────────────────────────────────────────────────────────────
+
+  const drawImage = (img: HTMLImageElement | null | undefined) => {
+    if (!canvasRef.current || !img || !img.complete || img.naturalWidth === 0) return;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
 
-    // Handle high DPI displays
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
 
-    // Resize canvas context backing store if needed
-    if (canvas.width !== rect.width * dpr || canvas.height !== rect.height * dpr) {
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      ctx.scale(dpr, dpr);
+    if (canvas.width !== Math.round(rect.width * dpr) || canvas.height !== Math.round(rect.height * dpr)) {
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+    }
+
+    ctx.save();
+    ctx.scale(dpr, dpr);
+
+    const canvasAR = rect.width / rect.height;
+    const imgAR = img.naturalWidth / img.naturalHeight;
+    let rw = rect.width, rh = rect.height, x = 0, y = 0;
+    if (imgAR > canvasAR) {
+      rw = rect.height * imgAR;
+      x = (rect.width - rw) / 2;
     } else {
-      ctx.save();
-      ctx.scale(dpr, dpr);
+      rh = rect.width / imgAR;
+      y = (rect.height - rh) / 2;
     }
 
-    // Object-fit: cover logic
-    const canvasAspectRatio = rect.width / rect.height;
-    const imageAspectRatio = img.width / img.height;
-
-    let renderWidth = rect.width;
-    let renderHeight = rect.height;
-    let x = 0;
-    let y = 0;
-
-    if (imageAspectRatio > canvasAspectRatio) {
-      renderWidth = rect.height * imageAspectRatio;
-      x = (rect.width - renderWidth) / 2;
-    } else {
-      renderHeight = rect.width / imageAspectRatio;
-      y = (rect.height - renderHeight) / 2;
-    }
-
-    ctx.drawImage(img, x, y, renderWidth, renderHeight);
-
-    // If we scaled above, restore
-    if (canvas.width === rect.width * dpr && canvas.height === rect.height * dpr) {
-      ctx.restore();
-    }
+    ctx.drawImage(img, x, y, rw, rh);
+    ctx.restore();
   };
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (images.length === 0) return;
-    // Map scroll progress (0..1) to frame index (0..totalFrames-1)
-    const frameIndex = Math.min(
-      Math.floor(latest * totalFrames),
-      totalFrames - 1
-    );
-
+  // Scroll → frame
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    const imgs = imagesRef.current;
+    if (!imgs.length) return;
+    const frameIndex = Math.min(Math.floor(latest * totalFrames), totalFrames - 1);
     if (frameIndex !== renderFrameRef.current) {
       renderFrameRef.current = frameIndex;
-      requestAnimationFrame(() => drawImage(images[frameIndex]));
+      const img = imgs[frameIndex];
+      if (img?.complete && img.naturalWidth > 0) {
+        requestAnimationFrame(() => drawImage(img));
+      }
     }
   });
 
-  // initial draw and on window resize draw
+  // First draw + resize listener
   useEffect(() => {
-    if (images.length > 0) {
-      const handleResize = () => drawImage(images[renderFrameRef.current]);
-      window.addEventListener('resize', handleResize);
-      drawImage(images[renderFrameRef.current]);
-      
-      // Attempt first draw once image 0 loads
-      if(!images[0].complete) {
-        images[0].onload = () => drawImage(images[0]);
-      } else {
-        drawImage(images[0]);
-      }
-
-      return () => window.removeEventListener('resize', handleResize);
-    }
+    if (!canvasMounted) return;
+    const imgs = imagesRef.current;
+    const handleResize = () => drawImage(imgs[renderFrameRef.current]);
+    window.addEventListener('resize', handleResize);
+    drawImage(imgs[0]);
+    return () => window.removeEventListener('resize', handleResize);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images]);
+  }, [canvasMounted]);
 
   return (
     <canvas
