@@ -3,18 +3,49 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-adu-black text-white antialiased overflow-x-hidden;
+    font-feature-settings: "cv02" 1, "cv03" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: 0.08em;
+  }
+
+  p {
+    letter-spacing: 0.02em;
   }
 }
 
 @layer utilities {
+  .font-orbitron {
+    font-family: var(--font-orbitron), sans-serif;
+  }
+
+  .font-rajdhani {
+    font-family: var(--font-rajdhani), sans-serif;
+  }
+
   .text-glow {
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5), 0 0 20px rgba(212, 175, 55, 0.3);
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.35), 0 0 18px rgba(212, 175, 55, 0.2);
   }
   
   .glass-panel {
-    @apply bg-adu-black/50 backdrop-blur-md border border-white/10;
+    @apply bg-[#090909]/75 backdrop-blur-xl border border-white/10;
+  }
+
+  .section-heading {
+    @apply uppercase text-white tracking-[0.3em];
+    font-family: var(--font-orbitron), sans-serif;
+  }
+
+  .input-field {
+    @apply w-full rounded-[1.5rem] border border-white/10 bg-[#0b0b0b] px-4 py-4 text-white placeholder:text-white/30 outline-none transition duration-300 focus:border-adu-gold focus:ring-2 focus:ring-adu-gold/15;
+    font-family: var(--font-rajdhani), sans-serif;
   }
 }
 
