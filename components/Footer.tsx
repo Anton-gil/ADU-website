@@ -7,59 +7,64 @@ export default function Footer() {
   const socials = ['TW', 'IG', 'LI', 'BE'];
 
   return (
-    <footer className="border-t border-white/5 py-12 px-8 font-rajdhani text-white">
-      <div className="max-w-7xl mx-auto flex flex-col items-center">
-        
-        {/* Main Footer Content */}
-        <div className="w-full flex flex-col md:flex-row justify-between mb-16 gap-12 border-b border-white/5 pb-16">
-          
-          {/* Left: Logo + Tagline + Socials */}
-          <div className="md:w-1/2 flex flex-col gap-8">
+    <footer className="border-t border-white/5 py-16 px-6 md:px-12 lg:px-16 font-rajdhani text-white">
+      <div className="max-w-7xl mx-auto flex flex-col gap-14">
+        <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] items-start border-b border-white/5 pb-16">
+          <div className="flex flex-col gap-6">
             <div className="flex items-center gap-4 cursor-default">
               <MagneticButton>
                 <img 
                   src="logo.png" 
                   alt="ADU Logo" 
-                  className="h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
+                  className="h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
                 />
               </MagneticButton>
+              <span className="font-orbitron text-sm uppercase tracking-[0.35em] text-white/50">
+                ADU Designs
+              </span>
             </div>
             
-            <p className="text-white/50 tracking-widest max-w-sm">
-              We craft digital experiences that demand attention. Engineered for the future.
+            <p className="max-w-lg text-white/60 leading-relaxed">
+              We craft digital experiences that demand attention. Engineered for clarity, performance, and premium brand perception.
             </p>
 
-            <div className="flex gap-6 mt-4">
+            <div className="flex flex-wrap gap-4 mt-3">
               {socials.map((social) => (
                 <MagneticButton key={social}>
                   <a 
                     href="#" 
-                    className="font-orbitron font-bold text-white/30 hover:text-adu-gold transition-colors tracking-widest text-sm inline-block p-2"
+                    className="font-orbitron font-bold text-white/40 hover:text-adu-gold transition-colors text-sm inline-flex items-center justify-center px-3 py-2 border border-white/10 rounded-full"
                   >
-                    [{social}]
+                    {social}
                   </a>
                 </MagneticButton>
               ))}
             </div>
           </div>
 
-          {/* Right: CTA */}
-          <div className="md:w-1/2 flex flex-col items-start md:items-end gap-6 text-left md:text-right">
-            <h3 className="font-orbitron font-bold text-3xl md:text-4xl uppercase tracking-widest text-white/90">
-              LET&apos;S BUILD SOMETHING.
-            </h3>
+          <div className="flex flex-col justify-between gap-6 text-left lg:text-right">
+            <div>
+              <h3 className="font-orbitron font-bold text-3xl md:text-4xl uppercase tracking-[0.25em] text-white/90">
+                LET&apos;S BUILD SOMETHING.
+              </h3>
+              <p className="mt-4 text-white/60 leading-relaxed max-w-sm">
+                Ready for an elevated online experience? Reach out and let&apos;s make it feel premium.
+              </p>
+            </div>
             
             <MagneticButton>
-              <button className="px-8 py-4 bg-white hover:bg-adu-gold text-adu-black font-orbitron font-bold tracking-[0.2em] transition-colors duration-300">
+              <button
+                type="button"
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                className="px-8 py-4 bg-white text-adu-black font-orbitron font-bold tracking-[0.18em] uppercase transition-colors duration-300 hover:bg-adu-gold hover:text-adu-black rounded-full"
+              >
                 INQUIRE@ADUDESIGNS.COM
               </button>
             </MagneticButton>
           </div>
-          
         </div>
 
-        {/* Bottom Copyright */}
-        <div className="w-full flex justify-between items-center text-xs tracking-widest text-white/20 uppercase font-orbitron">
+        <div className="flex flex-col gap-4 md:flex-row md:justify-between md:items-center text-xs tracking-[0.35em] text-white/20 uppercase font-orbitron">
           <span>&copy; {new Date().getFullYear()} ADU DESIGNS.</span>
           <span>ALL SYSTEMS NORMAL.</span>
         </div>

@@ -32,7 +32,7 @@ export default function RootLayout({
         <link rel="preload" as="image" href="/frames/ezgif-frame-002.jpg" />
         <link rel="preload" as="image" href="/frames/ezgif-frame-003.jpg" />
       </head>
-      <body className="font-rajdhani bg-adu-black text-white selection:bg-adu-gold selection:text-adu-black uppercase tracking-widest">
+      <body className="font-rajdhani bg-adu-black text-white selection:bg-adu-gold selection:text-adu-black antialiased">
         {children}
       </body>
     </html>

@@ -7,7 +7,9 @@ import ScrollCanvas from '@/components/ScrollCanvas';
 import Hero from '@/components/Hero';
 import AboutSection from '@/components/AboutSection';
 import ServicesSection from '@/components/ServicesSection';
+import WorkSection from '@/components/WorkSection';
 import CTASection from '@/components/CTASection';
+import ContactSection from '@/components/ContactSection';
 import StatsGrid from '@/components/StatsGrid';
 import Features from '@/components/Features';
 import Footer from '@/components/Footer';
@@ -69,9 +71,11 @@ export default function Home() {
         <Hero />
         
         {/* Scrolling content sections */}
+        <WorkSection />
         <AboutSection />
         <ServicesSection />
         <CTASection />
+        <ContactSection />
         
         {/* Bottom content with solid backing to finish the scroll */}
         <div className="relative bg-[#050505]/90 backdrop-blur-xl border-t border-white/5">
