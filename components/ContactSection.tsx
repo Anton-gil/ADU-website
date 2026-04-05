@@ -24,7 +24,7 @@ export default function ContactSection() {
 
     const subject = encodeURIComponent(`Project inquiry from ${form.name || 'a new lead'}`);
     const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\nCompany: ${form.company}\n\nMessage:\n${form.message}`);
-    const mailtoLink = `mailto:inquire@adudesigns.com?subject=${subject}&body=${body}`;
+    const mailtoLink = `mailto:adu.support@gmail.com?subject=${subject}&body=${body}`;
 
     window.location.href = mailtoLink;
     setSubmitted(true);
@@ -46,7 +46,7 @@ export default function ContactSection() {
           <span className="section-heading text-adu-gold text-sm md:text-base uppercase tracking-[0.35em] opacity-80">
             LET&apos;S CONNECT
           </span>
-          <h2 className="font-orbitron text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-[0.2em] text-white">
+          <h2 className="font-orbitron text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-[0.16em] text-white">
             Start the inquiry with the details that matter.
           </h2>
           <p className="max-w-xl text-white/70 leading-relaxed text-base md:text-lg">

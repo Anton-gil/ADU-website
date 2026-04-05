@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 interface PreloaderProps {
@@ -19,7 +20,15 @@ export default function Preloader({ progress }: PreloaderProps) {
         <motion.div
           animate={{ scale: [0.95, 1, 0.95], opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          className="flex items-center gap-4"
         >
+          <Image
+            src="/logo.png"
+            alt="ADU logo"
+            width={48}
+            height={48}
+            className="rounded-full bg-white/5 p-2"
+          />
           <span className="font-orbitron text-4xl font-bold tracking-[0.5em] text-white/80">
             ADU
           </span>

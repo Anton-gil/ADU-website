@@ -33,7 +33,7 @@ export default function StatsGrid() {
           <motion.div 
             key={i} 
             style={{ y: parallaxTransforms[i % 4] }}
-            className="relative rounded-[2rem] bg-[#080808] border border-white/10 p-8 md:p-10 overflow-hidden"
+            className="relative rounded-[2rem] bg-[#080808] border border-white/10 p-8 md:p-10 overflow-hidden flex flex-col items-center justify-center text-center"
           >
             <motion.div 
               initial={{ width: 0 }}
@@ -42,23 +42,27 @@ export default function StatsGrid() {
               className="absolute top-0 left-0 h-[3px] bg-adu-gold"
             />
             
-            <motion.span 
+            <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.8, delay: stat.delay + 0.2 }}
-              className="font-orbitron font-bold text-5xl md:text-6xl text-white mb-3"
+              className="mb-4 w-full"
             >
-              {stat.value}
-            </motion.span>
+              <span className="font-orbitron font-bold text-4xl md:text-5xl text-white block leading-tight">
+                {stat.value}
+              </span>
+            </motion.div>
             
-            <motion.span 
+            <motion.div 
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.8, delay: stat.delay + 0.4 }}
-              className="text-white/60 tracking-[0.2em] text-sm md:text-base uppercase"
+              className="w-full"
             >
-              {stat.label}
-            </motion.span>
+              <span className="text-white/60 tracking-[0.15em] text-xs md:text-sm uppercase block font-rajdhani">
+                {stat.label}
+              </span>
+            </motion.div>
           </motion.div>
         ))}
       </div>

@@ -21,9 +21,6 @@ export default function ServicesSection() {
         className="w-full max-w-6xl mx-auto pointer-events-auto"
       >
         <div className="mb-12 text-center max-w-2xl mx-auto">
-          <span className="section-heading text-xs md:text-sm tracking-[0.35em] text-adu-gold opacity-80 mb-4 block">
-            {SITE_DATA.services.label}
-          </span>
           <h2 className="font-orbitron text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-[0.25em]">
             {SITE_DATA.services.heading}
           </h2>

@@ -6,7 +6,7 @@ export const SITE_DATA = {
     scrollHint: "[ SCROLL SEQUENCE INITIATED ]",
   },
   services: {
-    label: "// CAPABILITIES",
+    label: "",
     heading: "SERVICES",
     items: [
       {
@@ -33,9 +33,9 @@ export const SITE_DATA = {
   },
   stats: [
     { label: "PROJECTS", value: "50+", delay: 0 },
-    { label: "YEARS", value: "5+", delay: 0.1 },
+    { label: "YEARS", value: "3 YEARS", delay: 0.1 },
     { label: "SATISFACTION", value: "100%", delay: 0.2 },
-    { label: "RESPONSE", value: "24HR", delay: 0.3 },
+    { label: "RESULTS", value: "7 DAYS", delay: 0.3 },
   ],
   features: [
     { title: "NO TEMPLATES", description: "Bespoke engineering only." },

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { SITE_DATA } from '@/data/siteData';
@@ -29,11 +30,20 @@ export default function AboutSection() {
             initial={{ y: 20, opacity: 0 }}
             animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-6"
+            className="space-y-6 relative"
           >
-            <h1 className="text-[9vw] md:text-[7vw] lg:text-[6vw] leading-[0.88] font-orbitron font-black tracking-[-0.03em] text-adu-gold">
-              ADU
-            </h1>
+            <div className="relative inline-block">
+              <Image
+                src="/logo.png"
+                alt="ADU Logo"
+                width={280}
+                height={280}
+                className="absolute inset-0 w-full h-full object-contain opacity-20 blur-sm"
+              />
+              <h1 className="text-[9vw] md:text-[7vw] lg:text-[6vw] leading-[0.88] font-orbitron font-black tracking-[-0.03em] text-adu-gold relative z-10">
+                ADU
+              </h1>
+            </div>
 
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-orbitron font-bold uppercase tracking-[0.35em] text-transparent [text-stroke:2px_rgba(255,255,255,0.9)]">
               DESIGNS

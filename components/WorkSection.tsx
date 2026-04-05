@@ -20,12 +20,6 @@ export default function WorkSection() {
     } as const;
   };
 
-  const galleryMotionProps = (index: number) => ({
-    initial: { opacity: 0, y: 50, scale: 0.94 },
-    animate: isInView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 50, scale: 0.94 },
-    transition: { duration: 0.85, delay: 0.15 + index * 0.08, ease: 'easeOut' },
-  } as const);
-
   return (
     <section
       id="work"
@@ -95,53 +89,6 @@ export default function WorkSection() {
               </MagneticButton>
             </motion.article>
           ))}
-        </div>
-
-        <div className="mt-16 rounded-[2rem] border border-white/10 bg-[#0f0f0f]/95 p-8">
-          <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-2xl">
-              <span className="section-heading text-adu-gold text-xs uppercase tracking-[0.35em] opacity-80">
-                PROJECT GALLERY
-              </span>
-              <h3 className="mt-4 text-3xl md:text-4xl font-orbitron font-bold uppercase tracking-[0.14em] text-white">
-                A curated showcase of premium visual systems.
-              </h3>
-            </div>
-            <p className="max-w-xl text-sm text-white/60 leading-relaxed">
-              Browse a polished gallery of signature case studies with thoughtful detail, luxury presentation, and purposeful storytelling.
-            </p>
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-3">
-            {SITE_DATA.nav.work.map((project, index) => (
-              <motion.article
-                key={`${project.slug}-gallery`}
-                {...galleryMotionProps(index)}
-                className="group overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]/95"
-              >
-                <div className="relative h-64 bg-gradient-to-br from-[#1f1f1f] via-[#111111] to-[#000000] p-6">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(212,175,55,0.18),_transparent_40%)]" />
-                  <div className="absolute inset-x-6 bottom-6 rounded-[1.5rem] border border-white/10 bg-[#050505]/90 p-5 backdrop-blur-xl">
-                    <span className="text-[0.65rem] uppercase tracking-[0.35em] text-adu-gold opacity-90">
-                      {project.category}
-                    </span>
-                    <h4 className="mt-3 text-2xl font-orbitron text-white">
-                      {project.name}
-                    </h4>
-                    <p className="mt-3 text-sm text-white/60 leading-relaxed">
-                      {project.description}
-                    </p>
-                    <Link
-                      href={`/work/${project.slug}`}
-                      className="mt-5 inline-flex rounded-full border border-adu-gold bg-adu-gold/5 px-4 py-2 text-xs uppercase tracking-[0.2em] text-adu-gold transition hover:bg-adu-gold hover:text-adu-black"
-                    >
-                      View case study
-                    </Link>
-                  </div>
-                </div>
-              </motion.article>
-            ))}
-          </div>
         </div>
       </motion.div>
     </section>

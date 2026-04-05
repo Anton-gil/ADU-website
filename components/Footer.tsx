@@ -58,7 +58,7 @@ export default function Footer() {
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
                 className="px-8 py-4 bg-white text-adu-black font-orbitron font-bold tracking-[0.18em] uppercase transition-colors duration-300 hover:bg-adu-gold hover:text-adu-black rounded-full"
               >
-                INQUIRE@ADUDESIGNS.COM
+                ADU.SUPPORT@GMAIL.COM
               </button>
             </MagneticButton>
           </div>
